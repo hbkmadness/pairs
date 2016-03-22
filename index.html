@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Testing</title>
+    <link rel="shortcut icon" type="image/png" href="jasmine/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="jasmine/jasmine.css">
+
+    <script type="text/javascript" src="jasmine/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/boot.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        function pairs(list, sum) {
+            var map = {};
+            list.forEach(function (number) {
+                map[number] = map[number] ? map[number] + 1 : 1;
+            });
+
+            var result = [];
+            list.forEach(function (number) {
+                map[number]--;
+                var partner = map[sum - number];
+                while (partner && partner > 0) {
+                    result.push([number, sum - number]);
+                    partner--;
+                }
+            });
+
+            return result;
+        }
+
+        describe("Testing Pairs function", function () {
+            it("Works with normal example", function () {
+                var result = pairs([1, 5, 100, 30, 17, 3, 0, 95, 99, 70, 7, 8], 100);
+
+                var expectedResult = [[1, 99], [5, 95], [100, 0], [30, 70]];
+                expect(result).toEqual(expectedResult);
+            });
+
+            it("Works with more than 1 combination", function () {
+                var result = pairs([1, 5, 100, 30, 17, 3, 0, 95, 99, 70, 70, 7, 8], 100);
+
+                var expectedResult = [[1, 99], [5, 95], [100, 0], [30, 70], [30, 70]];
+                expect(result).toEqual(expectedResult);
+            });
+
+            it("Works with even more combinations of same numbers", function () {
+                var result = pairs([1, 5, 100, 30, 30, 30, 17, 3, 0, 95, 99, 70, 70, 7, 8], 100);
+                // 3x30 and 2x70 have 6 possible combinations
+                var expectedResult = [[1, 99], [5, 95], [100, 0], [30, 70], [30, 70], [30, 70], [30, 70], [30, 70], [30, 70]];
+                expect(result).toEqual(expectedResult);
+            });
+
+
+            it("Doesn't show a pair of 50s if there are not enough numbers", function () {
+                var result = pairs([1, 5, 100, 30, 17, 3, 0, 95, 99, 70, 70, 7, 8], 100);
+
+                var expectedResult = [[1, 99], [5, 95], [100, 0], [30, 70], [30, 70]];
+                expect(result).toEqual(expectedResult);
+            });
+
+            it("Shows 3 times 50, 50 because there are 3 50s which can be combined in 3 different ways", function () {
+                var result = pairs([1, 5, 100, 30, 17, 3, 0, 95, 99, 50, 70, 70, 7, 8, 50, 50], 100);
+
+                var expectedResult = [[1, 99], [5, 95], [100, 0], [30, 70], [30, 70], [50, 50], [50, 50], [50, 50]];
+                expect(result).toEqual(expectedResult);
+            });
+
+            it("Shows 6 times 50, 50 because there are 4 50s which can be combined in 6 different ways", function () {
+                var result = pairs([1, 5, 100, 30, 17, 3, 0, 95, 99, 50, 70, 70, 7, 8, 50, 50, 50], 100);
+
+                var expectedResult = [[1, 99], [5, 95], [100, 0], [30, 70], [30, 70], [50, 50], [50, 50], [50, 50], [50, 50], [50, 50], [50, 50]];
+                expect(result).toEqual(expectedResult);
+            });
+        });
+    </script>
+
+</body>
+</html>
